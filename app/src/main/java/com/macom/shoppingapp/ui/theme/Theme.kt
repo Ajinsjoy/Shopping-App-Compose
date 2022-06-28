@@ -46,7 +46,6 @@ fun ShoppingAppTheme(
 ) {
     val useDynamicColors = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val colors = when {
-
         useDynamicColors && darkTheme -> dynamicLightColorScheme(LocalContext.current)
         useDynamicColors && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
         darkTheme -> LightColorPalette

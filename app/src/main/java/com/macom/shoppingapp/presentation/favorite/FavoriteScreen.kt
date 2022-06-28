@@ -133,7 +133,6 @@ fun ProductItem(
                                     fontSize = 14.sp
                                 )
                             }
-
                         }
                     }
                     Column(
@@ -151,9 +150,7 @@ fun ProductItem(
 //                                favAddState = !favAddState
 //                                colorState = if (favAddState) addFavColor else favColor
                                 onAddFavoriteClick(data.id, false)
-
                             },
-
                             enabled = true,
                         ) {
                             Icon(
