@@ -6,6 +6,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,7 +21,7 @@ fun Home(
     navController: NavController,
     scope: CoroutineScope,
     modalBottomSheetState: ModalBottomSheetState,
-    bottomSheetState: String
+    bottomSheetState: MutableState<Int>
 ) {
     val viewModel: HomeViewModel = hiltViewModel()
     val state = viewModel.mainUiState

@@ -39,6 +39,8 @@ import com.macom.shoppingapp.presentation.favorite.FavoriteScreen
 import com.macom.shoppingapp.presentation.homeScreen.Home
 
 import com.macom.shoppingapp.presentation.homeScreen.HomeViewModel
+import com.macom.shoppingapp.presentation.homeScreen.bottomsheet.BottomSheetContent
+import com.macom.shoppingapp.presentation.homeScreen.bottomsheet.BottomSheetContent2
 import com.macom.shoppingapp.presentation.settings.SettingsScreen
 import com.macom.shoppingapp.ui.theme.ShoppingAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,30 +55,24 @@ class MainActivity : ComponentActivity() {
 
             val modalBottomSheetState =
                 rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-            val bottomSheet = "Add Products"
-            val bottomSheetState by remember {
-                mutableStateOf(bottomSheet)
+            val sheetContentState = remember {
+                mutableStateOf(0)
             }
             val scope = rememberCoroutineScope()
             ModalBottomSheetLayout(
                 sheetContent = {
-                    if(bottomSheetState == "Add Products")
-                        BottomSheetContent()
-                    else
-                        BottomSheetContent2()
+                    when(sheetContentState.value){
+                        0 ->  BottomSheetContent()
+                        1 ->  BottomSheetContent2()
+                    }
+
                 },
                 sheetState = modalBottomSheetState,
                 sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
                 sheetBackgroundColor = colorResource(id = R.color.white),
             ) {
                 ShoppingAppTheme {
-//              Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
                     val navController = rememberNavController()
-
-
                     Scaffold(
                         bottomBar = {
                             val backStackEntry = navController.currentBackStackEntryAsState()
@@ -98,7 +94,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(it)
                         ) {
                             composable(route = NavigationItem.Home.route) {
-                                Home(navController, scope, modalBottomSheetState, bottomSheetState)
+                                Home(navController, scope, modalBottomSheetState, sheetContentState )
                             }
                             composable(NavigationItem.Favorite.route) {
                                 FavoriteScreen(navController)
@@ -107,103 +103,14 @@ class MainActivity : ComponentActivity() {
                                 SettingsScreen()
                             }
                         }
-
-//                      NavigationGraph(
-//                          navController = navController,
-//                          modifier = Modifier.padding(it),
-//                      )
                     }
                 }
             }
 
         }
-
-
     }
 }
 
-@Composable
-fun BottomSheetListItem(icon: ImageVector, title: String, onItemClick: (String) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = { onItemClick(title) })
-            .height(55.dp)
-            .background(color = colorResource(id = R.color.white))
-            .padding(start = 15.dp), verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(imageVector = icon, contentDescription = "Share", tint = Color.Black)
-        Spacer(modifier = Modifier.width(20.dp))
-        Text(text = title, color = Color.Black)
-    }
-}
-
-@Composable
-fun BottomSheetContent() {
-    val context = LocalContext.current
-    Column(modifier = Modifier.padding(vertical = 32.dp)) {
-        BottomSheetListItem(
-            icon = Icons.Default.Share,
-            title = "Share",
-            onItemClick = { title ->
-                Toast.makeText(
-                    context,
-                    title,
-                    Toast.LENGTH_SHORT
-                ).show()
-            })
-        BottomSheetListItem(
-            icon = Icons.Default.Link,
-            title = "Get link",
-            onItemClick = { title ->
-                Toast.makeText(
-                    context,
-                    title,
-                    Toast.LENGTH_SHORT
-                ).show()
-            })
-        BottomSheetListItem(
-            icon = Icons.Default.Edit,
-            title = "Edit name",
-            onItemClick = { title ->
-                Toast.makeText(
-                    context,
-                    title,
-                    Toast.LENGTH_SHORT
-                ).show()
-            })
-        BottomSheetListItem(
-            icon = Icons.Default.Delete,
-            title = "Delete collection",
-            onItemClick = { title ->
-                Toast.makeText(
-                    context,
-                    title,
-                    Toast.LENGTH_SHORT
-                ).show()
-            })
-    }
-}
-
-
-
-@Composable
-fun BottomSheetContent2() {
-    val context = LocalContext.current
-    Column(modifier = Modifier.padding(vertical = 32.dp)) {
-        BottomSheetListItem(
-            icon = Icons.Default.Share,
-            title = "Share",
-            onItemClick = { title ->
-                Toast.makeText(
-                    context,
-                    title,
-                    Toast.LENGTH_SHORT
-                ).show()
-            })
-    }
-
-}
 
 @Preview(showBackground = true)
 @Composable

@@ -51,7 +51,7 @@ fun Product(
     favorite: Boolean,
     scope: CoroutineScope,
     modalBottomSheetState: ModalBottomSheetState,
-    bottomSheetState: String
+    bottomSheetState: MutableState<Int>
 ) {
     val context = LocalContext.current
     val viewModel: HomeViewModel = hiltViewModel()
@@ -71,13 +71,13 @@ fun Product(
                         context,
                         onAddFavoriteClick = { id, status ->
                             viewModel.addFavorite(id, status)
-
                         },
                         onItemClick = {
 
-                                scope.launch {
-                                    modalBottomSheetState.show()
-                                }
+                            scope.launch {
+                                bottomSheetState.value = 0
+                                modalBottomSheetState.show()
+                            }
                         })
                 }
             }
