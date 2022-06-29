@@ -3,6 +3,8 @@ package com.macom.shoppingapp.presentation.homeScreen
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -10,9 +12,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.macom.shoppingapp.presentation.homeScreen.component.*
+import kotlinx.coroutines.CoroutineScope
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Home( navController: NavController) {
+fun Home(
+    navController: NavController,
+    scope: CoroutineScope,
+    modalBottomSheetState: ModalBottomSheetState,
+    bottomSheetState: String
+) {
     val viewModel: HomeViewModel = hiltViewModel()
     val state = viewModel.mainUiState
     val scrollState = rememberScrollState()
@@ -38,7 +47,7 @@ fun Home( navController: NavController) {
                     .verticalScroll(scrollState)) {
                     Category(modifier = Modifier, state.value.categories)
                     Banner(Modifier, state.value.banners)
-                    Product(Modifier, state.value.products, false)
+                    Product(Modifier, state.value.products, false,scope,modalBottomSheetState,bottomSheetState)
 //                    Banner(Modifier, state.value.banners)
                     Spacer(modifier = Modifier.padding(bottom = 16.dp))
                 }

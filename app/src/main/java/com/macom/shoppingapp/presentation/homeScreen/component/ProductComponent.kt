@@ -7,25 +7,29 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -33,11 +37,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.macom.shoppingapp.R
 import com.macom.shoppingapp.domian.model.Product
 import com.macom.shoppingapp.presentation.homeScreen.HomeViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Product(modifier: Modifier, product: List<Product>, favorite: Boolean) {
+fun Product(
+    modifier: Modifier,
+    product: List<Product>,
+    favorite: Boolean,
+    scope: CoroutineScope,
+    modalBottomSheetState: ModalBottomSheetState,
+    bottomSheetState: String
+) {
     val context = LocalContext.current
     val viewModel: HomeViewModel = hiltViewModel()
     Column(
@@ -59,7 +74,10 @@ fun Product(modifier: Modifier, product: List<Product>, favorite: Boolean) {
 
                         },
                         onItemClick = {
-                            Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
+
+                                scope.launch {
+                                    modalBottomSheetState.show()
+                                }
                         })
                 }
             }
@@ -69,11 +87,12 @@ fun Product(modifier: Modifier, product: List<Product>, favorite: Boolean) {
 
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductItem(
     data: Product,
-    context:Context,
+    context: Context,
     onAddFavoriteClick: (Int, Boolean) -> Unit,
     onItemClick: () -> Unit
 ) {
